@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CF424396263DA4C300114FDD /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF424395263DA4C300114FDD /* ListViewController.swift */; };
 		CFC72066263B509C00BA7712 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC72065263B509C00BA7712 /* AppDelegate.swift */; };
 		CFC72068263B509C00BA7712 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC72067263B509C00BA7712 /* SceneDelegate.swift */; };
 		CFC7206A263B509C00BA7712 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFC72069263B509C00BA7712 /* ViewController.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CF424395263DA4C300114FDD /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		CFC72062263B509C00BA7712 /* CoredataMapProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoredataMapProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CFC72065263B509C00BA7712 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CFC72067263B509C00BA7712 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 				CFC72065263B509C00BA7712 /* AppDelegate.swift */,
 				CFC72067263B509C00BA7712 /* SceneDelegate.swift */,
 				CFC72069263B509C00BA7712 /* ViewController.swift */,
+				CF424395263DA4C300114FDD /* ListViewController.swift */,
 				CFC7206B263B509C00BA7712 /* Main.storyboard */,
 				CFC72071263B509D00BA7712 /* Assets.xcassets */,
 				CFC72073263B509D00BA7712 /* LaunchScreen.storyboard */,
@@ -143,6 +146,7 @@
 				CFC7206A263B509C00BA7712 /* ViewController.swift in Sources */,
 				CFC72066263B509C00BA7712 /* AppDelegate.swift in Sources */,
 				CFC72068263B509C00BA7712 /* SceneDelegate.swift in Sources */,
+				CF424396263DA4C300114FDD /* ListViewController.swift in Sources */,
 				CFC72070263B509C00BA7712 /* CoredataMapProject.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
