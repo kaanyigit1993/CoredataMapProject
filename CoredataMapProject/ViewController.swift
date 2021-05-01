@@ -8,12 +8,21 @@
 import UIKit
 import MapKit
 import CoreLocation
+import CoreData
 
 class ViewController: UIViewController,MKMapViewDelegate, CLLocationManagerDelegate{
 
+    
+    @IBOutlet weak var nameText: UITextField!
+    @IBOutlet weak var commentText: UITextField!
+    
     @IBOutlet weak var mapView: MKMapView!
     
     var locationManager = CLLocationManager()
+    
+    var chosenLatitude = Double()
+    var chosenLongitude = Double()
+
     
     
     override func viewDidLoad() {
@@ -23,10 +32,11 @@ class ViewController: UIViewController,MKMapViewDelegate, CLLocationManagerDeleg
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
-    
+        
+     
         
         let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(chooseLocation(gestureRecognizer:)))
-        gestureRecognizer.minimumPressDuration = 3
+        gestureRecognizer.minimumPressDuration = 2
         mapView.addGestureRecognizer(gestureRecognizer)
     }
     
@@ -36,10 +46,14 @@ class ViewController: UIViewController,MKMapViewDelegate, CLLocationManagerDeleg
             let touchedPoint = gestureRecognizer.location(in: self.mapView)
             let touchedCoordinate = self.mapView.convert(touchedPoint, toCoordinateFrom: self.mapView)
             
+            
+            chosenLatitude = touchedCoordinate.latitude
+            chosenLongitude = touchedCoordinate.longitude
+            
             let annotation = MKPointAnnotation()
             annotation.coordinate = touchedCoordinate
-            annotation.title = "New Annotation"
-            annotation.subtitle = "Travel Book"
+            annotation.title = nameText.text
+            annotation.subtitle = commentText.text
             self.mapView.addAnnotation(annotation)
         }
         
@@ -53,5 +67,26 @@ class ViewController: UIViewController,MKMapViewDelegate, CLLocationManagerDeleg
         mapView.setRegion(region, animated: true)
     }
 
+    @IBAction func saveButtonClicked(_ sender: Any) {
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        
+        let newPlace = NSEntityDescription.insertNewObject(forEntityName: "Places", into: context)
+        
+        newPlace.setValue(nameText.text, forKey: "title")
+        newPlace.setValue(commentText.text, forKey: "subtitle")
+        newPlace.setValue(chosenLatitude, forKey: "latitude")
+        newPlace.setValue(chosenLongitude, forKey: "longitude")
+        newPlace.setValue(UUID(), forKey: "id")
+        
+        do {
+            try context.save()
+            print("success")
+        } catch  {
+            print("error!")
+        }
+        
+    }
 }
 
