@@ -81,6 +81,11 @@ class ViewController: UIViewController,MKMapViewDelegate, CLLocationManagerDeleg
                                         mapView.addAnnotation(annotation)
                                         nameText.text = annotationTitle
                                         commentText.text = annotationSubtitle
+                                        
+                                        locationManager.stopUpdatingLocation()
+                                        let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+                                        let region = MKCoordinateRegion(center: coordinate, span: span)
+                                        mapView.setRegion(region, animated: true)
                                     }
                                 }
                             }
@@ -129,11 +134,64 @@ class ViewController: UIViewController,MKMapViewDelegate, CLLocationManagerDeleg
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let location = CLLocationCoordinate2D(latitude: locations[0].coordinate.latitude, longitude: locations[0].coordinate.longitude)
-        let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
-        let region = MKCoordinateRegion(center: location, span: span)
-        mapView.setRegion(region, animated: true)
+        if selectedTitle == "" {
+            let location = CLLocationCoordinate2D(latitude: locations[0].coordinate.latitude, longitude: locations[0].coordinate.longitude)
+            let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+            let region = MKCoordinateRegion(center: location, span: span)
+            mapView.setRegion(region, animated: true)
+        }else {
+            //
+        }
+       
     }
+    
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        if annotation is MKUserLocation {
+            return nil
+        }
+        
+        
+        let reuseId = "myAnnotation"
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView?.canShowCallout = true
+            pinView?.tintColor = UIColor.black
+            
+            let button = UIButton(type: UIButton.ButtonType.detailDisclosure)
+            pinView?.rightCalloutAccessoryView = button
+        }else {
+            pinView?.annotation = annotation
+        }
+        
+        return pinView
+        
+        
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        if selectedTitle != "" {
+            var requestLocation = CLLocation(latitude: annotationLatitude, longitude: annotationLongitude)
+            CLGeocoder().reverseGeocodeLocation(requestLocation) { (placemarks, error) in
+                //closure
+                if let placemark = placemarks {
+                    if placemark.count > 0 {
+                        let newPlacemark = MKPlacemark(placemark: placemark[0])
+                        let item = MKMapItem(placemark: newPlacemark)
+                        item.name = self.annotationTitle
+                        let launchOptions = [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeKey]
+                        item.openInMaps(launchOptions: launchOptions)
+                }
+                
+                
+                }
+            }
+        }
+    }
+    
 
     @IBAction func saveButtonClicked(_ sender: Any) {
         
@@ -154,6 +212,9 @@ class ViewController: UIViewController,MKMapViewDelegate, CLLocationManagerDeleg
         } catch  {
             print("error!")
         }
+        
+        NotificationCenter.default.post(name:NSNotification.Name("newPlace"), object: nil)
+        navigationController?.popViewController(animated: true)
         
     }
 }
